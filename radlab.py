@@ -32,9 +32,10 @@ def stats(counts, length):
         
     """
     print(f"\nThe number of counts taken for {length} m is: {sum(counts)}")
-    error = 1 / np.sqrt(sum(counts))
+    error = np.sqrt(sum(counts))
     print(f"Error for {length} m is: {error*100:.5f}%\n")
     return error
+
 
 
 if __name__ == "__main__":
