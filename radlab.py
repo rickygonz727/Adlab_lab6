@@ -1,4 +1,4 @@
-"""Statistics python calculator for Radiation Data
+"""Code for the Radiation Lab - Adlab Lab 6
 
 Authors: Ad-Lab 3 Spring 24 Semester
 Version" April 19th, 2024
@@ -6,6 +6,7 @@ Version" April 19th, 2024
 """
 
 import numpy as np
+import functions as fn
 
 
 time1, counts1 = np.genfromtxt("rad_70cm.txt",skip_header=7, unpack=True)
@@ -20,32 +21,40 @@ time9, counts9 = np.genfromtxt("rad_10cm.txt",skip_header=7, unpack=True)
 time10, counts10 = np.genfromtxt("rad_05cm.txt",skip_header=7, unpack=True)
 
 
-def stats(counts, length):
-    """This function prints and calculates statistics for the Adlab radiation lab
-    
-    Inputs:
-        counts (array): The array of the counts
-        length (float): The length of the distance from the source to the geiger tube
-        
-    Returns:
-        error (float): The percentage of the approximated Error using Poissons Equation
-        
-    """
-    print(f"\nThe number of counts taken for {length} m is: {sum(counts)}")
-    error = np.sqrt(sum(counts))
-    print(f"Error for {length} m is: {error*100:.5f}%\n")
-    return error
-
 
 
 if __name__ == "__main__":
-    stats(counts1,0.7)
-    stats(counts2,0.6)
-    stats(counts3,0.5)
-    stats(counts4,0.4)
-    stats(counts5,0.3)
-    stats(counts6,0.25)
-    stats(counts7,0.2)
-    stats(counts8,0.15)
-    stats(counts9,0.1)
-    stats(counts10,0.05)
+    fn.stats(counts1,0.7)
+    fn.stats(counts2,0.6)
+    fn.stats(counts3,0.5)
+    fn.stats(counts4,0.4)
+    fn.stats(counts5,0.3)
+    fn.stats(counts6,0.25)
+    fn.stats(counts7,0.2)
+    fn.stats(counts8,0.15)
+    fn.stats(counts9,0.1)
+    fn.stats(counts10,0.05)
+    
+    lambdas = np.zeros(10)
+    lambdas[0] = fn.decay_const(time1, counts1)
+    lambdas[1] = fn.decay_const(time2, counts2)
+    lambdas[2] = fn.decay_const(time3, counts3)
+    lambdas[3] = fn.decay_const(time4, counts4)
+    lambdas[4] = fn.decay_const(time5, counts5)
+    lambdas[5] = fn.decay_const(time6, counts6)
+    lambdas[6] = fn.decay_const(time7, counts7)
+    lambdas[7] = fn.decay_const(time8, counts8)
+    lambdas[8] = fn.decay_const(time9, counts9)
+    lambdas[9] = fn.decay_const(time10, counts10)
+    
+    fn.plot_counts(time1,counts1,0.7)
+    fn.plot_counts(time2,counts2,0.6)
+    fn.plot_counts(time3,counts3,0.5)
+    fn.plot_counts(time4,counts4,0.4)
+    fn.plot_counts(time5,counts5,0.3)
+    fn.plot_counts(time6,counts6,0.25)
+    fn.plot_counts(time7,counts7,0.2)
+    fn.plot_counts(time8,counts8,0.15)
+    fn.plot_counts(time9,counts9,0.1)
+    fn.plot_counts(time10,counts10,0.05)
+
