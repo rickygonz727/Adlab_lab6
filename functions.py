@@ -12,21 +12,26 @@ from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 
 
-def stats(counts, length):
+def stats(counts, length,condition):
     """This function prints and calculates statistics for the Adlab radiation lab
     
     Inputs:
         counts (array): The array of the counts
         length (float): The length of the distance from the source to the geiger tube
+        condition (bool): The condition of where or not to print the values within this function
         
     Returns:
-        error (float): The percentage of the approximated Error using Poissons Equation
+        values (list): A list of the error and the summation of all the counts. 
         
     """
-    print(f"\nThe number of counts taken for {length} m is: {sum(counts)}")
     error = 1/np.sqrt(sum(counts))
-    print(f"Error for {length} m is: {error*100:.5f}%\n")
-    return error
+
+    if condition:
+        print(f"\nThe number of counts taken for {length} m is: {sum(counts)}")
+        print(f"Error for {length} m is: {error*100:.5f}%\n")
+    
+    values = [error, sum(counts)]
+    return values
 
 
 def lin_curve(x,b,m):

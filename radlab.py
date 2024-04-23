@@ -7,6 +7,7 @@ Version" April 19th, 2024
 
 import numpy as np
 import functions as fn
+import matplotlib.pyplot as plt
 
 
 time1, counts1 = np.genfromtxt("rad_70cm.txt",skip_header=7, unpack=True)
@@ -21,19 +22,42 @@ time9, counts9 = np.genfromtxt("rad_10cm.txt",skip_header=7, unpack=True)
 time10, counts10 = np.genfromtxt("rad_05cm.txt",skip_header=7, unpack=True)
 
 
-
-
 if __name__ == "__main__":
-    fn.stats(counts1,0.7)
-    fn.stats(counts2,0.6)
-    fn.stats(counts3,0.5)
-    fn.stats(counts4,0.4)
-    fn.stats(counts5,0.3)
-    fn.stats(counts6,0.25)
-    fn.stats(counts7,0.2)
-    fn.stats(counts8,0.15)
-    fn.stats(counts9,0.1)
-    fn.stats(counts10,0.05)
+    distance = np.zeros(10)
+    distance[0] = 0.7
+    distance[1] = 0.6
+    distance[2] = 0.5
+    distance[3] = 0.4
+    distance[4] = 0.3
+    distance[5] = 0.25
+    distance[6] = 0.2
+    distance[7] = 0.15
+    distance[8] = 0.1
+    distance[9] = 0.05
+
+    sum_counts = np.zeros(10)
+    sum_counts[0] = fn.stats(counts1,0.7,True)[1]
+    sum_counts[1] = fn.stats(counts2,0.6,True)[1]
+    sum_counts[2] = fn.stats(counts3,0.5,True)[1]
+    sum_counts[3] = fn.stats(counts4,0.4,True)[1]
+    sum_counts[4] = fn.stats(counts5,0.3,True)[1]
+    sum_counts[5] = fn.stats(counts6,0.25,True)[1]
+    sum_counts[6] = fn.stats(counts7,0.2,True)[1]
+    sum_counts[7] = fn.stats(counts8,0.15,True)[1]
+    sum_counts[8] = fn.stats(counts9,0.1,True)[1]
+    sum_counts[9] = fn.stats(counts10,0.05,True)[1]
+    
+    plt.figure(1)
+    plt.figure(figsize=(7,5))
+    plt.title("The Relationship between Counts and Distance")
+    plt.xlabel("Distance (m)")
+    plt.ylabel("Counts")
+    plt.scatter(distance, sum_counts,label='Shielding Trend')
+    x = np.linspace(0.05,1,1000)
+    plt.plot(x,15/((x**2)), label='Inverse Square')
+    plt.legend()
+    plt.grid()
+    plt.show()
     
     lambdas = np.zeros(10)
     lambdas[0] = fn.decay_const(time1, counts1)
