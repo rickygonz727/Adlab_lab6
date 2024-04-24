@@ -24,7 +24,8 @@ def stats(counts, length,condition):
         values (list): A list of the error and the summation of all the counts. 
         
     """
-    error = 1/np.sqrt(sum(counts))
+    sigma = np.sqrt(sum(counts))
+    error = sigma / sum(counts)
 
     if condition:
         print(f"\nThe number of counts taken for {length} m is: {sum(counts)}")

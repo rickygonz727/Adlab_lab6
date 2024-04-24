@@ -54,7 +54,7 @@ if __name__ == "__main__":
     plt.ylabel("Counts")
     plt.scatter(distance, sum_counts,label='Shielding Trend')
     x = np.linspace(0.05,1,1000)
-    plt.plot(x,15/((x**2)), label='Inverse Square')
+    plt.plot(x,16/((x**2)), label='Inverse Square')
     plt.legend()
     plt.grid()
     plt.show()
