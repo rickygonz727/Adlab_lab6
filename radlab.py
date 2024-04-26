@@ -58,7 +58,7 @@ if __name__ == "__main__":
     plt.legend()
     plt.grid()
     plt.show()
-    
+    #comment
     lambdas = np.zeros(10)
     lambdas[0] = fn.decay_const(time1, counts1)
     lambdas[1] = fn.decay_const(time2, counts2)
