@@ -9,6 +9,7 @@ import numpy as np
 import functions as fn
 import matplotlib.pyplot as plt
 
+#%% Import Data
 
 time1, counts1 = np.genfromtxt("rad_70cm.txt",skip_header=7, unpack=True)
 time2, counts2 = np.genfromtxt("rad_60cm.txt",skip_header=7, unpack=True)
@@ -20,9 +21,43 @@ time7, counts7 = np.genfromtxt("rad_20cm.txt",skip_header=7, unpack=True)
 time8, counts8 = np.genfromtxt("rad_15cm.txt",skip_header=7, unpack=True)
 time9, counts9 = np.genfromtxt("rad_10cm.txt",skip_header=7, unpack=True)
 time10, counts10 = np.genfromtxt("rad_05cm.txt",skip_header=7, unpack=True)
+time1h, counts1h = np.genfromtxt("measurement_1_holedown.csv", delimiter=',', skip_header=1,unpack=True)
+time1h, counts19h = np.genfromtxt("measurement_19_holedown.csv", delimiter=',', skip_header=1,unpack=True)
+time1h, counts37h = np.genfromtxt("measurement_37_holedown.csv", delimiter=',', skip_header=1,unpack=True)
+time1h, counts55h = np.genfromtxt("measurement_55_holedown.csv", delimiter=',', skip_header=1,unpack=True)
+time1h, counts69h = np.genfromtxt("measurement_69_holedown.csv", delimiter=',', skip_header=1,unpack=True)
+time1h, counts84h = np.genfromtxt("measurement_84_holedown.csv", delimiter=',', skip_header=1,unpack=True)
+time1h, counts98h = np.genfromtxt("measurement_98_holedown.csv", delimiter=',', skip_header=1,unpack=True)
+timebg, countsbg = np.genfromtxt("background.csv",delimiter=',', skip_header=1, unpack=True)
 
 
+#%% Main Function
 if __name__ == "__main__":
+    
+    #%% Radiation Counts Definitions.
+    
+    counts1 = fn.true_counts(counts1,countsbg)
+    counts2 = fn.true_counts(counts2,countsbg)
+    counts3 = fn.true_counts(counts3,countsbg)
+    counts4 = fn.true_counts(counts4,countsbg)
+    counts5 = fn.true_counts(counts5,countsbg)
+    counts6 = fn.true_counts(counts6,countsbg)
+    counts7 = fn.true_counts(counts7,countsbg)
+    counts8 = fn.true_counts(counts8,countsbg)
+    counts9 = fn.true_counts(counts9,countsbg)
+    counts10 = fn.true_counts(counts10,countsbg)
+    
+    counts1h = fn.true_counts(counts1h,countsbg)
+    counts19h = fn.true_counts(counts19h,countsbg)
+    counts37h = fn.true_counts(counts37h,countsbg)
+    counts55h = fn.true_counts(counts55h,countsbg)
+    counts69h = fn.true_counts(counts69h,countsbg)
+    counts84h = fn.true_counts(counts84h,countsbg)
+    counts98h = fn.true_counts(counts98h,countsbg)
+
+
+    #%% Distance Array
+    #May have to edit this
     distance = np.zeros(10)
     distance[0] = 0.7
     distance[1] = 0.6
@@ -35,6 +70,8 @@ if __name__ == "__main__":
     distance[8] = 0.1
     distance[9] = 0.05
 
+    #Counts Array
+    #This section creates an array for the sum of the counts for each interval while also returning the uncertainty
     sum_counts = np.zeros(10)
     sum_counts[0] = fn.stats(counts1,0.7,True)[1]
     sum_counts[1] = fn.stats(counts2,0.6,True)[1]
@@ -47,6 +84,8 @@ if __name__ == "__main__":
     sum_counts[8] = fn.stats(counts9,0.1,True)[1]
     sum_counts[9] = fn.stats(counts10,0.05,True)[1]
     
+    #%% Radiation Sheilding Plot
+    #This plots Counts vs Distance
     plt.figure(1)
     plt.figure(figsize=(7,5))
     plt.title("The Relationship between Counts and Distance")
@@ -59,6 +98,8 @@ if __name__ == "__main__":
     plt.grid()
     plt.show()
     
+    #%% Decay Constant Calculations
+    #This section approximates the decay constants for each interval
     lambdas = np.zeros(10)
     lambdas[0] = fn.decay_const(time1, counts1)
     lambdas[1] = fn.decay_const(time2, counts2)
@@ -71,6 +112,9 @@ if __name__ == "__main__":
     lambdas[8] = fn.decay_const(time9, counts9)
     lambdas[9] = fn.decay_const(time10, counts10)
     
+    #%% Radiation Counts vs Time
+    #This section plots the counts vs time, which is what we had originally gotten on loggerpro during the lab.
+    #We can probably null this out for now. 
     fn.plot_counts(time1,counts1,0.7)
     fn.plot_counts(time2,counts2,0.6)
     fn.plot_counts(time3,counts3,0.5)

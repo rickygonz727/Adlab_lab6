@@ -12,6 +12,33 @@ from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 
 
+
+def true_counts(array_count,background):
+    """This function defines the method to obtain the true radiation count array for a specific array
+    
+    Inputs:
+        array_count (array): The original array of radiation counts
+        background (array): The background radiation counts
+        
+    Return:
+        new_array (array): The radiation array when considering background radiation
+        
+    """
+    
+    avg_background = np.round(np.average(background)) #Take the average of the radiation counts
+    #After the average is computed, we want a new array that is the same size as the original array
+    new_array = np.zeros(len(array_count))
+    #With this, we then begin a loop that subtracts all of the elements by this average value.
+    for i in range(len(array_count)):
+        #If the value ends up negative, then we replace with a zero in the new array
+        if array_count[i] - avg_background < 0:
+            new_array[i] = 0
+        #If the value is non-negative or zero, then we simply replace with the actual value.
+        elif array_count[i] - avg_background >= 0:
+            new_array[i] = array_count[i] - avg_background
+    #After the new array is built, we then return the new array
+    return new_array            
+    
 def stats(counts, length,condition):
     """This function prints and calculates statistics for the Adlab radiation lab
     
