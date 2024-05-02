@@ -8,6 +8,8 @@ Version" April 19th, 2024
 import numpy as np
 import functions as fn
 import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
+
 
 #%% Import Data
 
@@ -35,6 +37,8 @@ timebg, countsbg = np.genfromtxt("background.csv",delimiter=',', skip_header=1, 
 if __name__ == "__main__":
     
     #%% Radiation Counts Definitions.
+    
+    
     
     counts1 = fn.true_counts(counts1,countsbg)
     counts2 = fn.true_counts(counts2,countsbg)
@@ -126,3 +130,31 @@ if __name__ == "__main__":
     fn.plot_counts(time9,counts9,0.1)
     fn.plot_counts(time10,counts10,0.05)
 
+
+    intensity_array = np.zeros(10)
+    int1 = np.average(counts1) / np.average(time1)
+    int2 = np.average(counts2) / np.average(time2)
+    int3 = np.average(counts3) / np.average(time3)
+    int4 = np.average(counts4) / np.average(time4)
+    int5 = np.average(counts5) / np.average(time5)
+    int6 = np.average(counts6) / np.average(time6)
+    int7 = np.average(counts7) / np.average(time7)
+    int8 = np.average(counts8) / np.average(time8)
+    int9 = np.average(counts9) / np.average(time9)
+    int10 = np.average(counts10) / np.average(time10)
+    intensity_array[0] = int1
+    intensity_array[1] = int2
+    intensity_array[2] = int3
+    intensity_array[3] = int4
+    intensity_array[4] = int5
+    intensity_array[5] = int6
+    intensity_array[6] = int7
+    intensity_array[7] = int8
+    intensity_array[8] = int9
+    intensity_array[9] = int10
+    
+    int_fit, int_cov = curve_fit(fn.lin_curve, intensity_array, 1/(distance**2))
+    S = int_fit[0] * 2 * np.pi
+    C = np.average(intensity_array)
+    area = (C / S) * 2*np.pi*(np.average(distance)**2)
+    print(area)
