@@ -153,28 +153,39 @@ if __name__ == "__main__":
     plt.grid()
     plt.show()
     
-    S = int_fit[0] * 2 * np.pi
+    S = int_fit[0] *2*np.pi
     C = np.average(intensity_array)
-    area = np.zeros(10)
+    areal = np.zeros(5)
+    areaw = np.zeros(5)
     area1 = (C / S) * 2 * np.pi*((distance[0])**2)
     area2 = (C / S) * 2 * np.pi*((distance[1])**2)
     area3 = (C / S) * 2 * np.pi*((distance[2])**2)
     area4 = (C / S) * 2 * np.pi*((distance[3])**2)
     area5 = (C / S) * 2 * np.pi*((distance[4])**2)
+    
     area6 = (C / S) * 2 * np.pi*((distance[5])**2)
     area7 = (C / S) * 2 * np.pi*((distance[6])**2)
     area8 = (C / S) * 2 * np.pi*((distance[7])**2)
     area9 = (C / S) * 2 * np.pi*((distance[8])**2)
     area10 = (C / S) * 2 * np.pi*((distance[9])**2)
-    area[0] = area1
-    area[1] = area2
-    area[2] = area3
-    area[3] = area4
-    area[4] = area5
-    area[5] = area6
-    area[6] = area7
-    area[7] = area8
-    area[8] = area9
-    area[9] = area10
+    
+    areal[0] = area1
+    areal[1] = area2
+    areal[2] = area3
+    areal[3] = area4
+    areal[4] = area5
+    
+    areaw[0] = area6
+    areaw[1] = area7
+    areaw[2] = area8
+    areaw[3] = area9
+    areaw[4] = area10
+    
+    for kj in range(5):
+        areaw[kj] = float(f'{areaw[kj]:.2f}')
+    
+    W = np.sqrt(np.average(areaw))
+    L = np.sqrt(np.average(areal))
+    area = W*L
 
-    print(np.average(area))
+    print(area)
