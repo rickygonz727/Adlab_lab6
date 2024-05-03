@@ -130,6 +130,7 @@ if __name__ == "__main__":
     fn.plot_counts(time9,counts9,0.1)
     fn.plot_counts(time10,counts10,0.05)
 
+#%% Finding Area of the Detector
 
     intensity_array = np.zeros(10)
     int1 = np.average(counts1) / np.average(time1)
@@ -153,8 +154,29 @@ if __name__ == "__main__":
     intensity_array[8] = int9
     intensity_array[9] = int10
     
-    int_fit, int_cov = curve_fit(fn.lin_curve, intensity_array, 1/(distance**2))
-    S = int_fit[0] * 4 * np.pi
+    int_fit, int_cov = curve_fit(fn.lin_curve,intensity_array, 1/(distance**2))
+    S = int_fit[0] * 2 * np.pi
     C = np.average(intensity_array)
-    area = (C / S) * 4 * np.pi*(np.average(distance)**2)
-    print(area)
+    area = np.zeros(10)
+    area1 = (C / S) * 2 * np.pi*((distance[0])**2)
+    area2 = (C / S) * 2 * np.pi*((distance[1])**2)
+    area3 = (C / S) * 2 * np.pi*((distance[2])**2)
+    area4 = (C / S) * 2 * np.pi*((distance[3])**2)
+    area5 = (C / S) * 2 * np.pi*((distance[4])**2)
+    area6 = (C / S) * 2 * np.pi*((distance[5])**2)
+    area7 = (C / S) * 2 * np.pi*((distance[6])**2)
+    area8 = (C / S) * 2 * np.pi*((distance[7])**2)
+    area9 = (C / S) * 2 * np.pi*((distance[8])**2)
+    area10 = (C / S) * 2 * np.pi*((distance[9])**2)
+    area[0] = area1
+    area[1] = area2
+    area[2] = area3
+    area[3] = area4
+    area[4] = area5
+    area[5] = area6
+    area[6] = area7
+    area[7] = area8
+    area[8] = area9
+    area[9] = area10
+
+    print(np.average(area))
