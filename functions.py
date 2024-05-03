@@ -105,6 +105,7 @@ def log_fix(num):
 def decay_const(time, counts):
     """This function approximates the decay-constant for the radioactive decay of a radioacitve source from
         counts and time arrays.
+        Probably flaw in logic
         
     Inputs:
         time (list): An array of time-intervals from the radioactive decay
