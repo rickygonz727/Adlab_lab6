@@ -146,6 +146,7 @@ if __name__ == "__main__":
     plt.figure(figsize=(7,5))
     plt.scatter(intensity_array, 1/(distance**2), label='Strength')
     plt.plot(intensity_array, fn.lin_curve(intensity_array, int_fit[1],int_fit[0]), label='Fitted Curve')
+    plt.title("Plotting Intensity vs Inverse Square")
     plt.xlabel("Intensity (C/s)")
     plt.ylabel("1 / r^2")
     plt.legend()
