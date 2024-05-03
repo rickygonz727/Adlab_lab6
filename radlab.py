@@ -141,6 +141,17 @@ if __name__ == "__main__":
     intensity_array[9] = int10
     
     int_fit, int_cov = curve_fit(fn.lin_curve,intensity_array, 1/(distance**2))
+    
+    plt.figure(2)
+    plt.figure(figsize=(7,5))
+    plt.scatter(intensity_array, 1/(distance**2), label='Strength')
+    plt.plot(intensity_array, fn.lin_curve(intensity_array, int_fit[1],int_fit[0]), label='Fitted Curve')
+    plt.xlabel("Intensity (C/s)")
+    plt.ylabel("1 / r^2")
+    plt.legend()
+    plt.grid()
+    plt.show()
+    
     S = int_fit[0] * 2 * np.pi
     C = np.average(intensity_array)
     area = np.zeros(10)
