@@ -102,20 +102,6 @@ if __name__ == "__main__":
     plt.grid()
     plt.show()
     
-    #%% Decay Constant Calculations
-    #This section approximates the decay constants for each interval
-    lambdas = np.zeros(10)
-    lambdas[0] = fn.decay_const(time1, counts1)
-    lambdas[1] = fn.decay_const(time2, counts2)
-    lambdas[2] = fn.decay_const(time3, counts3)
-    lambdas[3] = fn.decay_const(time4, counts4)
-    lambdas[4] = fn.decay_const(time5, counts5)
-    lambdas[5] = fn.decay_const(time6, counts6)
-    lambdas[6] = fn.decay_const(time7, counts7)
-    lambdas[7] = fn.decay_const(time8, counts8)
-    lambdas[8] = fn.decay_const(time9, counts9)
-    lambdas[9] = fn.decay_const(time10, counts10)
-    
     #%% Radiation Counts vs Time
     #This section plots the counts vs time, which is what we had originally gotten on loggerpro during the lab.
     #We can probably null this out for now. 

@@ -101,28 +101,6 @@ def log_fix(num):
     #Then return the natural log list
     return new_list
     
-    
-def decay_const(time, counts):
-    """This function approximates the decay-constant for the radioactive decay of a radioacitve source from
-        counts and time arrays.
-        Probably flaw in logic
-        
-    Inputs:
-        time (list): An array of time-intervals from the radioactive decay
-        counts (list): An array of counts from the radioactive decay
-        
-    Returns:
-        lambda (float): The decay constant
-        
-    """
-    ln_time = log_fix(time) #Take the natural log of the time data
-    ln_counts = log_fix(counts) #Take the natural log of the counts data
-    rd_fit, rd_cov = curve_fit(lin_curve, ln_time, ln_counts) #Curve-fit to a linear graph
-    lamb = -rd_fit[0] #Extract the slope of the linear graph
-    
-    #Once the lambda value has been extracted, this function then returns the value.
-    return lamb
-    
 
 def plot_counts(time, counts, length):
     """This function plots the counts vs time for a radiactive decay
