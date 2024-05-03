@@ -152,7 +152,7 @@ if __name__ == "__main__":
     plt.legend()
     plt.grid()
     plt.show()
-    
+    """
     S = int_fit[0] *2*np.pi
     C = np.average(intensity_array)
     areal = np.zeros(5)
@@ -188,4 +188,8 @@ if __name__ == "__main__":
     L = np.sqrt(np.average(areal))
     area = W*L
 
+    print(area)
+    """
+    area_fit, area_cov = curve_fit(fn.inverse_sqr, distance, intensity_array)
+    area = area_fit[0]
     print(area)

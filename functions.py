@@ -77,6 +77,14 @@ def lin_curve(x,b,m):
     return m*x + b
 
 
+def inverse_sqr(x, A, B):
+    """A is the initial value
+    B is the horizontal adjustment
+    x is the list
+    """
+    return (A / (x**2)) +B
+
+
 def log_fix(num):
     """This function defines the method of making sure that all values in a data-set are real when taking
         the natural log
