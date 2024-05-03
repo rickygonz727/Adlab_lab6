@@ -154,7 +154,7 @@ if __name__ == "__main__":
     intensity_array[9] = int10
     
     int_fit, int_cov = curve_fit(fn.lin_curve, intensity_array, 1/(distance**2))
-    S = int_fit[0] * 2 * np.pi
+    S = int_fit[0] * 4 * np.pi
     C = np.average(intensity_array)
-    area = (C / S) * 2*np.pi*(np.average(distance)**2)
+    area = (C / S) * 4 * np.pi*((np.average(distance)+0.0001)**2)
     print(area)
