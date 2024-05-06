@@ -24,21 +24,19 @@ time8, counts8 = np.genfromtxt("rad_15cm.txt",skip_header=7, unpack=True)
 time9, counts9 = np.genfromtxt("rad_10cm.txt",skip_header=7, unpack=True)
 time10, counts10 = np.genfromtxt("rad_05cm.txt",skip_header=7, unpack=True)
 time1h, counts1h = np.genfromtxt("measurement_1_holedown.csv", delimiter=',', skip_header=1,unpack=True)
-time1h, counts19h = np.genfromtxt("measurement_19_holedown.csv", delimiter=',', skip_header=1,unpack=True)
-time1h, counts37h = np.genfromtxt("measurement_37_holedown.csv", delimiter=',', skip_header=1,unpack=True)
-time1h, counts55h = np.genfromtxt("measurement_55_holedown.csv", delimiter=',', skip_header=1,unpack=True)
-time1h, counts69h = np.genfromtxt("measurement_69_holedown.csv", delimiter=',', skip_header=1,unpack=True)
-time1h, counts84h = np.genfromtxt("measurement_84_holedown.csv", delimiter=',', skip_header=1,unpack=True)
-time1h, counts98h = np.genfromtxt("measurement_98_holedown.csv", delimiter=',', skip_header=1,unpack=True)
+time19h, counts19h = np.genfromtxt("measurement_19_holedown.csv", delimiter=',', skip_header=1,unpack=True)
+time37h, counts37h = np.genfromtxt("measurement_37_holedown.csv", delimiter=',', skip_header=1,unpack=True)
+time55h, counts55h = np.genfromtxt("measurement_55_holedown.csv", delimiter=',', skip_header=1,unpack=True)
+time69h, counts69h = np.genfromtxt("measurement_69_holedown.csv", delimiter=',', skip_header=1,unpack=True)
+time84h, counts84h = np.genfromtxt("measurement_84_holedown.csv", delimiter=',', skip_header=1,unpack=True)
+time98h, counts98h = np.genfromtxt("measurement_98_holedown.csv", delimiter=',', skip_header=1,unpack=True)
 timebg, countsbg = np.genfromtxt("background.csv",delimiter=',', skip_header=1, unpack=True)
 
 
 #%% Main Function
 if __name__ == "__main__":
     
-    #%% Radiation Counts Definitions.
-    
-    
+    #%% Radiation Counts with respect to Background radiation
     
     counts1 = fn.true_counts(counts1,countsbg)
     counts2 = fn.true_counts(counts2,countsbg)
@@ -59,10 +57,9 @@ if __name__ == "__main__":
     counts84h = fn.true_counts(counts84h,countsbg)
     counts98h = fn.true_counts(counts98h,countsbg)
 
-
     #%% Distance Array
     #May have to edit this
-    distance = np.zeros(10)
+    distance = np.zeros(17)
     distance[0] = 0.7
     distance[1] = 0.6
     distance[2] = 0.5
@@ -73,20 +70,34 @@ if __name__ == "__main__":
     distance[7] = 0.15
     distance[8] = 0.1
     distance[9] = 0.05
+    distance[10] = 0.792
+    distance[11] = 0.648
+    distance[12] = 0.504
+    distance[13] = 0.36
+    distance[14] = 0.248
+    distance[15] = 0.128
+    distance[16] = 0.016
 
-    #Counts Array
+    #%%Counts Array
     #This section creates an array for the sum of the counts for each interval while also returning the uncertainty
-    sum_counts = np.zeros(10)
-    sum_counts[0] = fn.stats(counts1,0.7,True)[1]
-    sum_counts[1] = fn.stats(counts2,0.6,True)[1]
-    sum_counts[2] = fn.stats(counts3,0.5,True)[1]
-    sum_counts[3] = fn.stats(counts4,0.4,True)[1]
-    sum_counts[4] = fn.stats(counts5,0.3,True)[1]
-    sum_counts[5] = fn.stats(counts6,0.25,True)[1]
-    sum_counts[6] = fn.stats(counts7,0.2,True)[1]
-    sum_counts[7] = fn.stats(counts8,0.15,True)[1]
-    sum_counts[8] = fn.stats(counts9,0.1,True)[1]
-    sum_counts[9] = fn.stats(counts10,0.05,True)[1]
+    sum_counts = np.zeros(17)
+    sum_counts[0] = fn.stats(counts1h,0.792,True)[1]
+    sum_counts[1] = fn.stats(counts1,0.7,True)[1]
+    sum_counts[2] = fn.stats(counts19h,0.648,True)[1]
+    sum_counts[3] = fn.stats(counts2,0.6,True)[1]
+    sum_counts[4] = fn.stats(counts37h,0.504,True)[1]
+    sum_counts[5] = fn.stats(counts3,0.5,True)[1]
+    sum_counts[6] = fn.stats(counts4,0.4,True)[1]
+    sum_counts[7] = fn.stats(counts55h,0.36,True)[1]
+    sum_counts[8] = fn.stats(counts5,0.3,True)[1]
+    sum_counts[9] = fn.stats(counts6,0.25,True)[1]
+    sum_counts[10] = fn.stats(counts69h,0.248,True)[1]
+    sum_counts[11] = fn.stats(counts7,0.2,True)[1]
+    sum_counts[12] = fn.stats(counts8,0.15,True)[1]
+    sum_counts[13] = fn.stats(counts84h,0.128,True)[1]
+    sum_counts[14] = fn.stats(counts9,0.1,True)[1]
+    sum_counts[15] = fn.stats(counts98h,0.016,True)[1]
+    sum_counts[16] = fn.stats(counts10,0.05,True)[1]
     
     #%% Radiation Sheilding Plot
     #This plots Counts vs Distance
@@ -103,6 +114,7 @@ if __name__ == "__main__":
     plt.show()
     
     #%% Radiation Counts vs Time
+    
     #This section plots the counts vs time, which is what we had originally gotten on loggerpro during the lab.
     #We can probably null this out for now. 
     fn.plot_counts(time1,counts1,0.7)
@@ -115,33 +127,55 @@ if __name__ == "__main__":
     fn.plot_counts(time8,counts8,0.15)
     fn.plot_counts(time9,counts9,0.1)
     fn.plot_counts(time10,counts10,0.05)
+    fn.plot_counts(time1h,counts1h,0.792)
+    fn.plot_counts(time19h,counts19h,0.648)
+    fn.plot_counts(time37h,counts37h,0.504)
+    fn.plot_counts(time55h,counts55h,0.36)
+    fn.plot_counts(time69h,counts69h,0.248)
+    fn.plot_counts(time84h,counts84h,0.128)
+    fn.plot_counts(time98h,counts98h,0.016)
 
 #%% Finding Area of the Detector
 
-    intensity_array = np.zeros(10)
-    int1 = np.average(counts1) / np.average(time1)
-    int2 = np.average(counts2) / np.average(time2)
-    int3 = np.average(counts3) / np.average(time3)
-    int4 = np.average(counts4) / np.average(time4)
-    int5 = np.average(counts5) / np.average(time5)
-    int6 = np.average(counts6) / np.average(time6)
-    int7 = np.average(counts7) / np.average(time7)
-    int8 = np.average(counts8) / np.average(time8)
-    int9 = np.average(counts9) / np.average(time9)
-    int10 = np.average(counts10) / np.average(time10)
-    intensity_array[0] = int1
-    intensity_array[1] = int2
-    intensity_array[2] = int3
-    intensity_array[3] = int4
-    intensity_array[4] = int5
-    intensity_array[5] = int6
-    intensity_array[6] = int7
-    intensity_array[7] = int8
-    intensity_array[8] = int9
-    intensity_array[9] = int10
+    intensity_array = np.zeros(17)
+    int1 = sum(counts1) / sum(time1)
+    int2 = sum(counts2) / sum(time2)
+    int3 = sum(counts3) / sum(time3)
+    int4 = sum(counts4) / sum(time4)
+    int5 = sum(counts5) / sum(time5)
+    int6 = sum(counts6) / sum(time6)
+    int7 = sum(counts7) / sum(time7)
+    int8 = sum(counts8) / sum(time8)
+    int9 = sum(counts9) / sum(time9)
+    int10 = sum(counts10) / sum(time10)
+    int11 = sum(counts1h)/sum(time1h)
+    int12 = sum(counts19h)/sum(time19h)
+    int13 = sum(counts37h)/sum(time37h)
+    int14 = sum(counts55h)/sum(time55h)
+    int15 = sum(counts69h)/sum(time69h)
+    int16 = sum(counts84h)/sum(time84h)
+    int17 = sum(counts98h)/sum(time98h)
+
+    intensity_array[0] = float(f"{int1:.2f}")
+    intensity_array[1] = float(f"{int2:.2f}")
+    intensity_array[2] = float(f"{int3:.2f}")
+    intensity_array[3] = float(f"{int4:.2f}")
+    intensity_array[4] = float(f"{int5:.2f}")
+    intensity_array[5] = float(f"{int6:.2f}")
+    intensity_array[6] = float(f"{int7:.4f}")
+    intensity_array[7] = float(f"{int8:.4f}")
+    intensity_array[8] = float(f"{int9:.4f}")
+    intensity_array[9] = float(f"{int10:.6f}")
+    intensity_array[10] = float(f"{int11:.6f}")
+    intensity_array[11] = int12
+    intensity_array[12] = int13
+    intensity_array[13] = int14
+    intensity_array[14] = int15
+    intensity_array[15] = int16
+    intensity_array[16] = int17
     
-    int_fit, int_cov = curve_fit(fn.lin_curve,intensity_array, 1/(distance**2))
-    
+    int_fit, int_cov = curve_fit(fn.lin_curve, intensity_array, 1/(distance**2))
+     
     plt.figure(2)
     plt.figure(figsize=(7,5))
     plt.scatter(intensity_array, 1/(distance**2), label='Strength')
@@ -152,44 +186,20 @@ if __name__ == "__main__":
     plt.legend()
     plt.grid()
     plt.show()
-    """
-    S = int_fit[0] *2*np.pi
-    C = np.average(intensity_array)
-    areal = np.zeros(5)
-    areaw = np.zeros(5)
-    area1 = (C / S) * 2 * np.pi*((distance[0])**2)
-    area2 = (C / S) * 2 * np.pi*((distance[1])**2)
-    area3 = (C / S) * 2 * np.pi*((distance[2])**2)
-    area4 = (C / S) * 2 * np.pi*((distance[3])**2)
-    area5 = (C / S) * 2 * np.pi*((distance[4])**2)
     
-    area6 = (C / S) * 2 * np.pi*((distance[5])**2)
-    area7 = (C / S) * 2 * np.pi*((distance[6])**2)
-    area8 = (C / S) * 2 * np.pi*((distance[7])**2)
-    area9 = (C / S) * 2 * np.pi*((distance[8])**2)
-    area10 = (C / S) * 2 * np.pi*((distance[9])**2)
+    S = int_fit[0] *(4) * np.pi
+    C = intensity_array
     
-    areal[0] = area1
-    areal[1] = area2
-    areal[2] = area3
-    areal[3] = area4
-    areal[4] = area5
+    areal = np.zeros(17)
     
-    areaw[0] = area6
-    areaw[1] = area7
-    areaw[2] = area8
-    areaw[3] = area9
-    areaw[4] = area10
+    for kj in range(10):
+        areal[kj] = (C[kj]/S) * (4) * np.pi * (distance[kj]**2)
+        areal[kj] = float(f'{areal[kj]}')
+    for kj in range(11,17):
+        areal[kj] = (C[kj]/S) * (16) * np.pi * (distance[kj]**2)
+        areal[kj] = float(f'{areal[kj]}')
     
-    for kj in range(5):
-        areaw[kj] = float(f'{areaw[kj]:.2f}')
+    d_error = np.std(areal)
+    print(f"The Approximate Area of the Detector is: {((np.average(areal))*10000):.3f} cm^2")
+    print(f"The error in this approximation is: +/- {(d_error*10000):.2f} cm^2")
     
-    W = np.sqrt(np.average(areaw))
-    L = np.sqrt(np.average(areal))
-    area = W*L
-
-    print(area)
-    """
-    area_fit, area_cov = curve_fit(fn.inverse_sqr, distance, intensity_array)
-    area = area_fit[0]
-    print(area)
