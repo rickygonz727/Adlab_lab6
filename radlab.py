@@ -158,7 +158,7 @@ if __name__ == "__main__":
 
     intensity_array[0] = float(f"{int1:.2f}")
     intensity_array[1] = float(f"{int2:.2f}")
-    intensity_array[2] = float(f"{int3:.2f}")
+    intensity_array[2] = float(f"{int3:.6f}")
     intensity_array[3] = float(f"{int4:.2f}")
     intensity_array[4] = float(f"{int5:.2f}")
     intensity_array[5] = float(f"{int6:.2f}")
@@ -174,11 +174,13 @@ if __name__ == "__main__":
     intensity_array[15] = int16
     intensity_array[16] = int17
     
-    int_fit, int_cov = curve_fit(fn.lin_curve, intensity_array, 1/(distance**2))
+    inverse_sqr = 1 / (distance**2)
+    
+    int_fit, int_cov = curve_fit(fn.lin_curve, intensity_array, inverse_sqr)
      
     plt.figure(2)
     plt.figure(figsize=(7,5))
-    plt.scatter(intensity_array, 1/(distance**2), label='Strength')
+    plt.scatter(intensity_array, inverse_sqr, label='Strength')
     plt.plot(intensity_array, fn.lin_curve(intensity_array, int_fit[1],int_fit[0]), label='Fitted Curve')
     plt.title("Plotting Intensity vs Inverse Square")
     plt.xlabel("Intensity (C/s)")
@@ -187,19 +189,19 @@ if __name__ == "__main__":
     plt.grid()
     plt.show()
     
-    S = int_fit[0] *(4) * np.pi
+    S = float(f"{(int_fit[0] *(4) * np.pi):.2f}")
     C = intensity_array
     
     areal = np.zeros(17)
     
     for kj in range(10):
-        areal[kj] = (C[kj]/S) * (4) * np.pi * (distance[kj]**2)
-        areal[kj] = float(f'{areal[kj]}')
-    for kj in range(11,17):
-        areal[kj] = (C[kj]/S) * (16) * np.pi * (distance[kj]**2)
-        areal[kj] = float(f'{areal[kj]}')
-    
+        areal[kj] = (C[kj]) *(distance[kj]**2) / 12
+        areal[kj] = float(f'{areal[kj]:.6f}')
+    for kj in range(10,17):
+        areal[kj] = (C[kj]) * (distance[kj]**2) / 3
+        areal[kj] = float(f'{areal[kj]:.8f}')
+    areal *= (4*np.pi)/S
     d_error = np.std(areal)
-    print(f"The Approximate Area of the Detector is: {((np.average(areal))*10000):.3f} cm^2")
+    print(f"The Approximate Area of the Detector is: {((sum(areal))*(10000)):.3f} cm^2")
     print(f"The error in this approximation is: +/- {(d_error*10000):.2f} cm^2")
     
