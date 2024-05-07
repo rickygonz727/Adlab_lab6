@@ -8,9 +8,7 @@ This code contains various functions related to the radiation lab
 
 
 import numpy as np
-from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
-
 
 
 def true_counts(array_count,background):
@@ -39,6 +37,7 @@ def true_counts(array_count,background):
     #After the new array is built, we then return the new array
     return new_array            
     
+
 def stats(counts, length,condition):
     """This function prints and calculates statistics for the Adlab radiation lab
     
@@ -51,13 +50,15 @@ def stats(counts, length,condition):
         values (list): A list of the error and the summation of all the counts. 
         
     """
-    sigma = np.sqrt(sum(counts))
-    error = sigma / sum(counts)
-
+    sigma = np.sqrt(sum(counts)) #Take the square root of the total counts
+    error = sigma / sum(counts) #Calculate the possions error by dividing by the total counts
+    
+    #If our condition to print is true, then we print the statistics
     if condition:
         print(f"\nThe number of counts taken for {length} m is: {sum(counts)}")
         print(f"Error for {length} m is: {error*100:.5f}%\n")
     
+    #Afterwards, we then define a list with the remaining values and return by the function. 
     values = [error, sum(counts)]
     return values
 

@@ -13,6 +13,8 @@ from scipy.optimize import curve_fit
 
 #%% Import Data
 
+#Importing data from two different groups.
+#This chunk of data came from the group without the lego stand.
 time1, counts1 = np.genfromtxt("rad_70cm.txt",skip_header=7, unpack=True)
 time2, counts2 = np.genfromtxt("rad_60cm.txt",skip_header=7, unpack=True)
 time3, counts3 = np.genfromtxt("rad_50cm.txt",skip_header=7, unpack=True)
@@ -23,6 +25,8 @@ time7, counts7 = np.genfromtxt("rad_20cm.txt",skip_header=7, unpack=True)
 time8, counts8 = np.genfromtxt("rad_15cm.txt",skip_header=7, unpack=True)
 time9, counts9 = np.genfromtxt("rad_10cm.txt",skip_header=7, unpack=True)
 time10, counts10 = np.genfromtxt("rad_05cm.txt",skip_header=7, unpack=True)
+
+#This next chunk imports the code from the lego setup. 
 time1h, counts1h = np.genfromtxt("measurement_1_holedown.csv", delimiter=',', skip_header=1,unpack=True)
 time19h, counts19h = np.genfromtxt("measurement_19_holedown.csv", delimiter=',', skip_header=1,unpack=True)
 time37h, counts37h = np.genfromtxt("measurement_37_holedown.csv", delimiter=',', skip_header=1,unpack=True)
@@ -30,6 +34,8 @@ time55h, counts55h = np.genfromtxt("measurement_55_holedown.csv", delimiter=',',
 time69h, counts69h = np.genfromtxt("measurement_69_holedown.csv", delimiter=',', skip_header=1,unpack=True)
 time84h, counts84h = np.genfromtxt("measurement_84_holedown.csv", delimiter=',', skip_header=1,unpack=True)
 time98h, counts98h = np.genfromtxt("measurement_98_holedown.csv", delimiter=',', skip_header=1,unpack=True)
+
+#This imports the background radiation, which will be used to obtain the true counts for each trial. 
 timebg, countsbg = np.genfromtxt("background.csv",delimiter=',', skip_header=1, unpack=True)
 
 
@@ -37,6 +43,11 @@ timebg, countsbg = np.genfromtxt("background.csv",delimiter=',', skip_header=1, 
 if __name__ == "__main__":
     
     #%% Radiation Counts with respect to Background radiation
+    
+    #In order to get the actual counts for each radiation trial, we run this true_counts function with the original
+    #data-sets with the background radiation.
+    #For each of these lines, it redefines the radiation counts array into a new array.
+    #The true_counts process is explained in functions.py
     
     counts1 = fn.true_counts(counts1,countsbg)
     counts2 = fn.true_counts(counts2,countsbg)
@@ -58,7 +69,10 @@ if __name__ == "__main__":
     counts98h = fn.true_counts(counts98h,countsbg)
 
     #%% Distance Array
-    #May have to edit this
+    
+    #With our counts-values organized, we then work towards building an array of distance values from the different radiation
+    #measurements. These values are ordered from group 1 to group 2.
+    
     distance = np.zeros(17)
     distance[0] = 0.7
     distance[1] = 0.6
@@ -80,7 +94,9 @@ if __name__ == "__main__":
 
     #%%Counts Array
     #This section creates an array for the sum of the counts for each interval while also returning the uncertainty
+    #It creates a new array of to store the values that were created from the stats function
     sum_counts = np.zeros(17)
+    
     sum_counts[0] = fn.stats(counts1h,0.792,True)[1]
     sum_counts[1] = fn.stats(counts1,0.7,True)[1]
     sum_counts[2] = fn.stats(counts19h,0.648,True)[1]
@@ -100,7 +116,8 @@ if __name__ == "__main__":
     sum_counts[16] = fn.stats(counts10,0.05,True)[1]
     
     #%% Radiation Sheilding Plot
-    #This plots Counts vs Distance
+    #This plots Counts vs Distance from the overall count and its respecitve distance. 
+    #We also fixed a scaled inverse square curve using arbitrary data and had them on both the same graph. 
     plt.figure(1)
     plt.figure(figsize=(7,5))
     plt.title("The Relationship between Counts and Distance")
@@ -114,9 +131,9 @@ if __name__ == "__main__":
     plt.show()
     
     #%% Radiation Counts vs Time
+    #This section plots the counts vs time for each trial, which is what we had originally gotten on loggerpro during the lab.
+    #This section is based off the function plot_counts defined in functions.py
     
-    #This section plots the counts vs time, which is what we had originally gotten on loggerpro during the lab.
-    #We can probably null this out for now. 
     fn.plot_counts(time1,counts1,0.7)
     fn.plot_counts(time2,counts2,0.6)
     fn.plot_counts(time3,counts3,0.5)
@@ -135,7 +152,13 @@ if __name__ == "__main__":
     fn.plot_counts(time84h,counts84h,0.128)
     fn.plot_counts(time98h,counts98h,0.016)
 
-#%% Finding Area of the Detector
+    #%% Calculating the Intensity of Radioactive Decay
+    
+    #This part of the code begins working towards approximating the area of the detector.
+    #Basing off of how accurate these calculations would be, from the uncertainty values we had calculated from the stats function,
+    #we decided to truncate much of the values since we cannot trust that many decimal places from these approximations.
+    #We first start off by defining an array to store counts per second values, and then calcualte the rate of decay and store 
+    #into the array.
 
     intensity_array = np.zeros(17)
     int1 = sum(counts1) / sum(time1)
@@ -156,6 +179,9 @@ if __name__ == "__main__":
     int16 = sum(counts84h)/sum(time84h)
     int17 = sum(counts98h)/sum(time98h)
 
+    #These two parts are really the same parts of the code, we define the Intensity array, based on multiple divisions.
+    #In order to accomodate the machine error, we truncated much of the decimal places when storing into the array.
+    
     intensity_array[0] = float(f"{int1:.2f}")
     intensity_array[1] = float(f"{int2:.2f}")
     intensity_array[2] = float(f"{int3:.6f}")
@@ -174,14 +200,18 @@ if __name__ == "__main__":
     intensity_array[15] = int16
     intensity_array[16] = int17
     
+    #%% Intensity vs Inverse Square Fitting
+    #In order to obtain our constant, S, we defined the inverse_sqr variable using the data.
     inverse_sqr = 1 / (distance**2)
-    
+    #After creating the inverse square data, we then curve fit to get the slope between Intensity and 1/r^2
     int_fit, int_cov = curve_fit(fn.lin_curve, intensity_array, inverse_sqr)
      
+    #We then plot the Intensity vs 1/r^2
+    #We decided not to include the fitted curve because there was one value that skewed a bit of the data. 
     plt.figure(2)
     plt.figure(figsize=(7,5))
     plt.scatter(intensity_array, inverse_sqr, label='Strength')
-    plt.plot(intensity_array, fn.lin_curve(intensity_array, int_fit[1],int_fit[0]), label='Fitted Curve')
+    #plt.plot(intensity_array, fn.lin_curve(intensity_array, int_fit[1],int_fit[0]), label='Fitted Curve')
     plt.title("Plotting Intensity vs Inverse Square")
     plt.xlabel("Intensity (C/s)")
     plt.ylabel("1 / r^2")
@@ -189,19 +219,32 @@ if __name__ == "__main__":
     plt.grid()
     plt.show()
     
+    #%% Approximating the area of the Detector
+    #In order to find the detector, we need the slope of the intensity vs inverse sqr plot.
+    #We accomplish this by indexing the curve_fitting calculation, and multiplying by 4pi.
+    #Then, we redefine the intensity_array as a different variable to be more concise. 
     S = float(f"{(int_fit[0] *(4) * np.pi):.2f}")
     C = intensity_array
     
+    #After obbtaining our values, we then define an array to store the area calculations. 
     areal = np.zeros(17)
+    #Then, for the first 10 values, which are the farthest away, we input our 1/12 method into calculating the area
+    #And then we truncate to 6 or 8 decimal places depending on the distance. 
     
     for kj in range(10):
         areal[kj] = (C[kj]) *(distance[kj]**2) / 12
         areal[kj] = float(f'{areal[kj]:.6f}')
+        
     for kj in range(10,17):
         areal[kj] = (C[kj]) * (distance[kj]**2) / 3
         areal[kj] = float(f'{areal[kj]:.8f}')
+        
+    #After all of the values are stored, we then multiply into the array all of the constant values.
+    #We also determine the uncertainty from the standard deviation
     areal *= (4*np.pi)/S
     d_error = np.std(areal)
+    
+    #These prints then print the final results. 
     print(f"The Approximate Area of the Detector is: {((sum(areal))*(10000)):.3f} cm^2")
     print(f"The error in this approximation is: +/- {(d_error*10000):.2f} cm^2")
     
