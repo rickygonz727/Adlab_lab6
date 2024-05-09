@@ -87,5 +87,3 @@ def plot_counts(distance, counts, group):
     plt.show()
     
     
-def counts(A,d,eps,beam,absorp,xray):
-    return (A/(d**2)) * eps * beam * absorp * xray
