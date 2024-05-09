@@ -63,29 +63,29 @@ def stats(counts, length,condition):
     return values
 
 
-def plot_counts(time, counts, length):
-    """This function plots the counts vs time for a radiactive decay
+def plot_counts(distance, counts, group):
+    """This function plots the counts vs distance for a radiactive decay
     
     Inputs:
-        time (list): Time values
+        distance (list): Time values
         counts (list): Counts values
-        length (float): The length of the distance from the source to the detector
+        group (int): The group number
         
     Returns:
         None
         
     """
     
-    title = f"The Counts vs Time for the {length} length"
+    title = f"Counts vs Distance of Group #{group}"
     plt.figure(figsize=(7,5))
-    plt.plot(time, counts,label='Activity')
+    plt.scatter(distance, counts,label='Data')
     plt.title(title)
-    plt.xlabel('Time (sec)')
+    plt.xlabel('Distance (m)')
     plt.ylabel("Counts")
     plt.legend()
     plt.grid()
     plt.show()
     
     
-def strength(A,r,I):
-    return (I/A) * 4*np.pi * (r**2)
+def counts(A,d,eps,beam,absorp,xray):
+    return (A/(d**2)) * eps * beam * absorp * xray

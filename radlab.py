@@ -6,22 +6,24 @@ Version: May 9th, 2024
 This code is built to accomodate the Radiation Lab. 
 """
 
+#%% Modules
 
 import numpy as np
 import functions as fn
 import matplotlib.pyplot as plt
-#from lmfit.models import ExponentialModel
+from lmfit.models import ExponentialModel
 from lmfit import Model
 
+#%% Main
 
 if __name__ == "__main__":
         
     #Import Data, Radiation Counts and Time
     
-    #Background Radation
+    #%% Background Radation
     timebg, countsbg = np.genfromtxt("background.csv",delimiter=',', skip_header=1, unpack=True)
     
-    #Group 2's Data-sets
+    #%% Group 2's Data-sets
     
     time1, counts1 = np.genfromtxt("rad_70cm.txt",skip_header=7, unpack=True)
     time2, counts2 = np.genfromtxt("rad_60cm.txt",skip_header=7, unpack=True)
@@ -49,7 +51,7 @@ if __name__ == "__main__":
     
     g2d[0],g2d[1],g2d[2],g2d[3],g2d[4],g2d[5],g2d[6],g2d[7],g2d[8],g2d[9] = 0.7,0.6,0.5,0.4,0.3,0.25,0.2,0.15,0.1,0.05
     
-    #Group 2 Activity (Counts per Second)
+    #%% Group 2 Activity (Counts per Second)
     
     g2I = np.zeros(10)
     
@@ -63,9 +65,25 @@ if __name__ == "__main__":
     g2I[7] = sum(counts8) / sum(time8)
     g2I[8] = sum(counts9) / sum(time9)
     g2I[9] = sum(counts10) / sum(time10)
-
     
-    #Group 1's Data-sets
+    #%% Summation of all Counts per trial
+    sum_counts2 = np.zeros(10)
+    
+    sum_counts2[0] = fn.stats(counts1,0.7,False)[1]
+    sum_counts2[1] = fn.stats(counts2,0.6,False)[1]
+    sum_counts2[2] = fn.stats(counts3,0.5,False)[1]
+    sum_counts2[3] = fn.stats(counts4,0.4,False)[1]
+    sum_counts2[4] = fn.stats(counts5,0.3,False)[1]
+    sum_counts2[5] = fn.stats(counts6,0.25,False)[1]
+    sum_counts2[6] = fn.stats(counts7,0.2,False)[1]
+    sum_counts2[7] = fn.stats(counts8,0.15,False)[1]
+    sum_counts2[8] = fn.stats(counts9,0.1,False)[1]
+    sum_counts2[9] = fn.stats(counts10,0.05,False)[1]
+    
+    #%% Plotting Group 2 Data
+    fn.plot_counts(g2d,sum_counts2,2)
+    
+    #%% Group 1's Data-sets
     time1h, counts1h = np.genfromtxt("measurement_1_holedown.csv",delimiter=',', skip_header=7, unpack=True)
     time19h, counts19h = np.genfromtxt("measurement_19_holedown.csv",delimiter=',', skip_header=7, unpack=True)
     time37h, counts37h = np.genfromtxt("measurement_37_holedown.csv",delimiter=',', skip_header=7, unpack=True)
@@ -86,7 +104,7 @@ if __name__ == "__main__":
     
     g1d[0],g1d[1],g1d[2],g1d[3],g1d[4],g1d[5],g1d[6] = 0.792,0.648,0.504,0.36,0.248,0.128,0.016
     
-    #Group 1 Activity (Counts per Second)
+    #%% Group 1 Activity (Counts per Second)
     
     g1I = np.zeros(7)
     
@@ -97,10 +115,8 @@ if __name__ == "__main__":
     g1I[4] = sum(counts69h) / sum(time69h)
     g1I[5] = sum(counts84h) / sum(time84h)
     g1I[6] = sum(counts98h) / sum(time98h)
-
     
-    #%% Group 1 Data Fit
-    
+    #%% Summation of all Counts per Trial
     sum_counts1 = np.zeros(7)
     
     sum_counts1[0] = fn.stats(counts1h,0.792,False)[1]
@@ -110,28 +126,24 @@ if __name__ == "__main__":
     sum_counts1[4] = fn.stats(counts69h,0.248,False)[1]
     sum_counts1[5] = fn.stats(counts84h,0.128,False)[1]
     sum_counts1[6] = fn.stats(counts98h,0.016,False)[1]
+
+    #%% Plotting Group 1 Data
     
-    model1 = Model(fn.strength)
-    fit1 = model1.fit(sum_counts1,x=g1d,g1I,0.001)
+    fn.plot_counts(g1d,sum_counts1,1)
+
+    
+    #%% Group 1 Data Fit
+    
+    model1 = ExponentialModel(prefix='rad_',nan_policy='omit')
+    p1 = model1.guess(g1I,x=g1d)
+    fit1 = model1.fit(g1I, x=g1d)
     print(f"{fit1.best_values}\n\n")
     print(f"{fit1.fit_report()}\n\n")
     
     #%% Group 2 Data Fit
     
-    sum_counts2 = np.zeros(10)
-    
-    sum_counts2[0] = fn.stats(counts1,0.7,False)[1]
-    sum_counts2[1] = fn.stats(counts2,0.6,False)[1]
-    sum_counts2[2] = fn.stats(counts3,0.5,False)[1]
-    sum_counts2[3] = fn.stats(counts4,0.4,False)[1]
-    sum_counts2[4] = fn.stats(counts5,0.3,False)[1]
-    sum_counts2[5] = fn.stats(counts6,0.25,False)[1]
-    sum_counts2[6] = fn.stats(counts7,0.2,False)[1]
-    sum_counts2[7] = fn.stats(counts8,0.15,False)[1]
-    sum_counts2[8] = fn.stats(counts9,0.1,False)[1]
-    sum_counts2[9] = fn.stats(counts10,0.05,False)[1]
-    
-    model2 = Model(fn.strength)
-    fit2 = model2.fit(sum_counts2,x=g2d,g2I,0.001)
+    model2 = ExponentialModel(prefix='rad_',nan_policy='omit')
+    p2 = model2.guess(g2I,x=g2d)
+    fit2 = model2.fit(g2I, x=g2d)
     print(f"{fit2.best_values}\n\n")
     print(f"{fit2.fit_report()}\n\n")
