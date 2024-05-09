@@ -63,54 +63,6 @@ def stats(counts, length,condition):
     return values
 
 
-def lin_curve(x,b,m):
-    """This function defines a linear curve for curve-fitting a set of data
-    
-    Inputs:
-        x (list): An array of x-values
-        m (float): The slope of the data
-        b (flaot): The y-intercept of the data
-        
-    Returns:
-        m*x + b (float): The graph of a fitted linear curve
-        
-    """
-    return m*x + b
-
-
-def inverse_sqr(x, A, B):
-    """A is the initial value
-    B is the horizontal adjustment
-    x is the list
-    """
-    return (A / (x**2)) +B
-
-
-def log_fix(num):
-    """This function defines the method of making sure that all values in a data-set are real when taking
-        the natural log
-        
-    Inputs:
-        num (list): A list of numbers
-        
-    Returns:
-        num (int): Zero if the natural log of the number is undefined
-        np.log(num): A value if the natural log is defined.
-        
-    """
-    new_list = np.zeros(len(num)) #Create an empty array to store the new values
-    
-    for i in range(len(num)): #Iterate through the array
-        if np.log(num[i]) < 0: #If the natural log is undefined, replace with a zero
-            new_list[i] = 0
-            
-        elif np.log(num[i]) > 0: #Else it is defined, replace with the value
-            new_list[i] = np.log(num[i])
-            
-    #Then return the natural log list
-    return new_list
-    
-
 def plot_counts(time, counts, length):
     """This function plots the counts vs time for a radiactive decay
     
@@ -134,3 +86,6 @@ def plot_counts(time, counts, length):
     plt.grid()
     plt.show()
     
+    
+def strength(A,r,I):
+    return (I/A) * 4*np.pi * (r**2)
