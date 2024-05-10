@@ -10,8 +10,7 @@ This code is built to accomodate the Radiation Lab.
 
 import numpy as np
 import functions as fn
-import matplotlib.pyplot as plt
-from lmfit.models import ExponentialModel
+#from lmfit.models import ExponentialModel
 from lmfit import Model, Parameters
 
 #%% Main
@@ -133,19 +132,18 @@ if __name__ == "__main__":
 
     #%% Initialize Model
     
-    model = Model(fn.beam,independent_vars=['intensity','distance'])
+    model = Model(fn.inverse_sqr,independent_vars=['x'])
     params = Parameters()
-    params.add('area',value=0.000555)
-    params.add('eps',value=0.1)
-    params.add('fz',value=0.1)
-    params.add('gam',value=0.1)
+    params.add('a',value=0.1)
+    params.add('b',value=0.1)
+
     
     #%% Group 1 Data Fit
 
     #model1 = ExponentialModel(prefix='rad_',nan_policy='omit')
     #p1 = model1.guess(g1I,x=g1d)
     
-    fit1 = model.fit(sum_counts1, params, intensity=g1I, distance=(g1d))
+    fit1 = model.fit(sum_counts1, params, x=(g1d))
     print(f"{fit1.best_values}\n\n")
     print(f"{fit1.fit_report()}\n\n")
     
@@ -153,7 +151,7 @@ if __name__ == "__main__":
     
     #model2 = ExponentialModel(prefix='rad_',nan_policy='omit')
     #p2 = model2.guess(g2I,x=g2d)
-    fit2 = model.fit(sum_counts2, params, intensity=g2I, distance=(g2d))
+    fit2 = model.fit(sum_counts2, params, x=(g2d))
     print(f"{fit2.best_values}\n\n")
     print(f"{fit2.fit_report()}\n\n")
     
