@@ -87,3 +87,13 @@ def plot_counts(distance, counts, group):
     plt.show()
     
     
+def inverse_sqr(x,a,b):
+    return (a/(x**2)) + b
+
+
+def strength(I,r,A):
+    return (I/A) * 4*np.pi*(r**2)
+
+
+def beam(intensity,distance,area,eps,fz,gam):
+    return (intensity * (distance**2)) / (area*eps*fz*gam)

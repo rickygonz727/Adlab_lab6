@@ -12,7 +12,7 @@ import numpy as np
 import functions as fn
 import matplotlib.pyplot as plt
 from lmfit.models import ExponentialModel
-from lmfit import Model
+from lmfit import Model, Parameters
 
 #%% Main
 
@@ -131,19 +131,29 @@ if __name__ == "__main__":
     
     fn.plot_counts(g1d,sum_counts1,1)
 
+    #%% Initialize Model
+    
+    model = Model(fn.beam,independent_vars=['intensity','distance'])
+    params = Parameters()
+    params.add('area',value=0.000555)
+    params.add('eps',value=0.1)
+    params.add('fz',value=0.1)
+    params.add('gam',value=0.1)
     
     #%% Group 1 Data Fit
+
+    #model1 = ExponentialModel(prefix='rad_',nan_policy='omit')
+    #p1 = model1.guess(g1I,x=g1d)
     
-    model1 = ExponentialModel(prefix='rad_',nan_policy='omit')
-    p1 = model1.guess(g1I,x=g1d)
-    fit1 = model1.fit(g1I, x=g1d)
+    fit1 = model.fit(sum_counts1, params, intensity=g1I, distance=(g1d))
     print(f"{fit1.best_values}\n\n")
     print(f"{fit1.fit_report()}\n\n")
     
     #%% Group 2 Data Fit
     
-    model2 = ExponentialModel(prefix='rad_',nan_policy='omit')
-    p2 = model2.guess(g2I,x=g2d)
-    fit2 = model2.fit(g2I, x=g2d)
+    #model2 = ExponentialModel(prefix='rad_',nan_policy='omit')
+    #p2 = model2.guess(g2I,x=g2d)
+    fit2 = model.fit(sum_counts2, params, intensity=g2I, distance=(g2d))
     print(f"{fit2.best_values}\n\n")
     print(f"{fit2.fit_report()}\n\n")
+    
