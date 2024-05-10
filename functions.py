@@ -86,14 +86,17 @@ def plot_counts(distance, counts, group):
     plt.grid()
     plt.show()
     
-    
-def inverse_sqr(x,a,b):
-    return (a/(x**2)) + b
-
 
 def strength(I,r,A):
-    return (I/A) * 4*np.pi*(r**2)
-
-
-def beam(intensity,distance,area,eps,fz,gam):
-    return (intensity * (distance**2)) / (area*eps*fz*gam)
+    """This function defines a function of the Strength of a Radioactive Source
+    
+    Inputs:
+        I (array): The intensity of the radioactive source
+        r (array): The distance between the source and the detector
+        A (float): The area of the detector.
+        
+    Returns: 
+        (I/A) * 4*np.pi*(r**2)  (float): The strength of the radioactive source.
+        
+    """
+    return (I/A) * 4*np.pi*(r**2) 
